@@ -58,7 +58,7 @@ const VIDEO_FRAME_OVERRIDES: Partial<
 > = {
   // Some downloaded karaoke videos are exported with the lyric column pushed to one side.
   // These overrides let the frame be re-centered per song without breaking the default layout.
-  26: { scale: 1, translateXPercent: 0 },
+  26: { scale: 1.18, translateXPercent: -14 },
 };
 
 const DEFAULT_VIDEO_FRAME = {
