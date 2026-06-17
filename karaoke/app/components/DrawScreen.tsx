@@ -1,22 +1,40 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import BallMachine from "./BallMachine";
+import { useBackgroundMusic } from "./BackgroundMusicProvider";
+import { SoundEffectControls, useSoundEffects } from "./SoundEffects";
 import { formatearNumero, useKaraokeGame } from "./useKaraokeGame";
 
 export default function DrawScreen() {
   const router = useRouter();
+  const { playSound, soundAudioElements } = useSoundEffects();
   const {
     allNumbers,
     currentNumber,
     drawnNumbers,
     isSpinning,
-    previewNumber,
     remainingNumbers,
     selectedSong,
     spinBall,
     spinVersion,
   } = useKaraokeGame();
+  const { playBallRevealSound, playDrawMusic } = useBackgroundMusic();
+  const wasSpinningRef = useRef(false);
+
+  useEffect(() => {
+    if (wasSpinningRef.current && !isSpinning && currentNumber !== null) {
+      playBallRevealSound();
+    }
+
+    wasSpinningRef.current = isSpinning;
+  }, [currentNumber, isSpinning, playBallRevealSound]);
+
+  function handleSpinBall() {
+    playDrawMusic();
+    spinBall();
+  }
 
   return (
     <main className="screen-shell relative min-h-screen overflow-hidden bg-[#08111f] text-white">
@@ -38,7 +56,6 @@ export default function DrawScreen() {
           <BallMachine
             numbers={allNumbers}
             drawnNumbers={drawnNumbers}
-            activeNumber={previewNumber}
             selectedNumber={currentNumber}
             spinVersion={spinVersion}
           />
@@ -76,6 +93,10 @@ export default function DrawScreen() {
           </button>
         </div>
 
+        <div className="absolute bottom-[clamp(84px,11vh,132px)] left-[clamp(16px,2vw,40px)] z-30">
+          <SoundEffectControls onPlaySound={playSound} variant="bombo" />
+        </div>
+
         {currentNumber !== null && selectedSong ? (
           <div className="absolute left-1/2 top-[clamp(18px,2.2vw,42px)] z-10 w-[min(78vw,72rem)] -translate-x-1/2 px-4 text-center">
             <p className="text-[clamp(11px,0.82vw,14px)] uppercase tracking-[0.42em] text-[#ffd58a]/76 [text-shadow:0_2px_18px_rgba(0,0,0,0.45)]">
@@ -94,7 +115,7 @@ export default function DrawScreen() {
           <div className="tv-draw-center mx-auto flex w-full max-w-[58rem] flex-col items-center gap-[clamp(10px,1vw,18px)]">
             <button
               type="button"
-              onClick={spinBall}
+              onClick={handleSpinBall}
               disabled={isSpinning || remainingNumbers.length === 0}
               className="rounded-full bg-[linear-gradient(135deg,#ffd36b,#ff8c59)] px-[clamp(24px,2.2vw,38px)] py-[clamp(12px,1.25vw,18px)] text-[clamp(0.95rem,1.15vw,1.2rem)] font-black text-[#1f1305] shadow-[0_10px_40px_rgba(255,146,89,0.32)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-45"
             >
@@ -153,6 +174,7 @@ export default function DrawScreen() {
           </div>
         </div>
       </section>
+      {soundAudioElements}
     </main>
   );
 }
