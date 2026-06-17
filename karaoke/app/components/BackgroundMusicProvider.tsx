@@ -142,16 +142,8 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
 
   const duckBackgroundMusic = useCallback(() => {
     isDuckedRef.current = true;
-    const audio = audioRef.current;
-    const drawAudio = drawAudioRef.current;
-
-    if (audio) {
-      fadeAudioVolume(audio, DUCKED_BACKGROUND_MUSIC_VOLUME, backgroundFadeIntervalRef);
-    }
-
-    if (drawAudio) {
-      fadeAudioVolume(drawAudio, DUCKED_BACKGROUND_MUSIC_VOLUME, drawFadeIntervalRef);
-    }
+    fadeAudioVolume(audioRef.current, DUCKED_BACKGROUND_MUSIC_VOLUME, backgroundFadeIntervalRef);
+    fadeAudioVolume(drawAudioRef.current, DUCKED_BACKGROUND_MUSIC_VOLUME, drawFadeIntervalRef);
   }, [fadeAudioVolume]);
 
   const pauseBackgroundMusic = useCallback(() => {
@@ -162,16 +154,8 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
 
   const restoreBackgroundMusicVolume = useCallback(() => {
     isDuckedRef.current = false;
-    const audio = audioRef.current;
-    const drawAudio = drawAudioRef.current;
-
-    if (audio) {
-      fadeAudioVolume(audio, BACKGROUND_MUSIC_VOLUME, backgroundFadeIntervalRef);
-    }
-
-    if (drawAudio) {
-      fadeAudioVolume(drawAudio, BACKGROUND_MUSIC_VOLUME, drawFadeIntervalRef);
-    }
+    fadeAudioVolume(audioRef.current, BACKGROUND_MUSIC_VOLUME, backgroundFadeIntervalRef);
+    fadeAudioVolume(drawAudioRef.current, BACKGROUND_MUSIC_VOLUME, drawFadeIntervalRef);
   }, [fadeAudioVolume]);
 
   const resumeBackgroundMusic = useCallback(() => {

@@ -510,7 +510,8 @@ export default function DetailScreen() {
     });
   }
 
-  function showBombo() {
+  async function showBomboAndPauseSong() {
+    await fadeOutCurrentSong();
     setIsBomboVisible(true);
   }
 
@@ -599,7 +600,7 @@ export default function DetailScreen() {
               <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
                 <button
                   type="button"
-                  onClick={showBombo}
+                  onClick={showBomboAndPauseSong}
                   className="rounded-full bg-[#ff4fa0]/14 px-[clamp(12px,1vw,18px)] py-[clamp(6px,0.65vw,10px)] text-[clamp(0.76rem,0.84vw,0.92rem)] font-semibold text-white/88 transition hover:bg-[#ff4fa0]/22"
                 >
                   Volver al bombo
